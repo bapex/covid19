@@ -96,3 +96,12 @@ sw.*
 
 # OGP images
 ogp/*
+
+# Vagrant
+.vagrant
+
+# RSpec screenshots
+spec/screenshot
+
+# Gem Libralies
+vendor/bundle

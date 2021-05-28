@@ -3,30 +3,39 @@ name: OGP Builder
 on:
   push:
     branches:
-      - staging
+      - master
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
     steps:
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '14.16.0'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
       - name: Cache dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
-          path: ~/.cache/yarn
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
       - run: yarn install --frozen-lockfile
       - run: yarn run test
       - run: yarn run generate:deploy
-      - run: pip install selenium
-      - run: (python -m http.server --directory ./dist 8000 &)  ; python ./ui-test/ogp_screenshot.py
+      - run: pip3 install selenium
+      - run: (python3 -m http.server --directory ./dist 8000 &)  ; python3 ./ui-test/ogp_screenshot.py
       - name: Upload screenshot
         uses: actions/upload-artifact@v1
         with:
@@ -36,30 +45,26 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-      with:
-        ref: deploy/new_ogp
-    - name: Download ogp images
-      uses: actions/download-artifact@v1
-      with:
-        name: ogp
-    - name: Commit files
-      run: |
-        mv ogp/* static/
-        rm -rf ogp
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add static
-        git commit -m "Add changes" 
-    - name: Push changes
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: deploy/new_ogp
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v2
-      with:
-        title: '[DEPLOY] OGP refresh pull request'
-        token: ${{ secrets.GITHUB_TOKEN }}
-        branch: deploy/new_ogp
-        base: staging
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.extract_branch.outputs.branch }}
+      - name: Download ogp images
+        uses: actions/download-artifact@v1
+        with:
+          name: ogp
+      - name: Commit files
+        run: |
+          cp -rp ogp static/
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add static
+          git commit -m "Add changes"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.extract_branch.outputs.branch }}

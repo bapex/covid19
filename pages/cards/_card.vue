@@ -1,215 +1,264 @@
 <template>
-  <div>
-    <confirmed-cases-details-card
-      v-if="this.$route.params.card == 'details-of-confirmed-cases'"
-    />
-    <confirmed-cases-number-card
-      v-else-if="this.$route.params.card == 'number-of-confirmed-cases'"
-    />
-    <confirmed-cases-attributes-card
-      v-else-if="this.$route.params.card == 'attributes-of-confirmed-cases'"
-    />
-    <tested-number-card
-      v-else-if="this.$route.params.card == 'number-of-tested'"
-    />
-    <telephone-advisory-reports-number-card
-      v-else-if="
-        this.$route.params.card ==
-          'number-of-reports-to-covid19-telephone-advisory-center'
-      "
-    />
-    <consultation-desk-reports-number-card
-      v-else-if="
-        this.$route.params.card ==
-          'number-of-reports-to-covid19-consultation-desk'
-      "
-    />
-    <metro-card
-      v-else-if="
-        this.$route.params.card == 'predicted-number-of-toei-subway-passengers'
-      "
-    />
-    <agency-card v-else-if="this.$route.params.card == 'agency'" />
-  </div>
+  <component :is="cardComponent" />
 </template>
 
-<i18n>
-{
-  "ja": {
-    "検査陽性者の状況": "検査陽性者の状況",
-    "陽性患者数": "陽性患者数",
-    "陽性患者の属性": "陽性患者の属性",
-    "検査実施数": "検査実施数",
-    "新型コロナコールセンター相談件数": "新型コロナコールセンター相談件数",
-    "新型コロナ受診相談窓口相談件数": "新型コロナ受診相談窓口相談件数",
-    "都営地下鉄の利用者数の推移": "都営地下鉄の利用者数の推移",
-    "都庁来庁者数の推移": "都庁来庁者数の推移"
-  },
-  "en": {
-    "検査陽性者の状況": "Details of confirmed cases",
-    "陽性患者数": "Number of confirmed cases",
-    "陽性患者の属性": "Confirmed patient attributes",
-    "検査実施数": "Number of tests conducted",
-    "新型コロナコールセンター相談件数": "Number of inquiries to COVID-19 telephone advisory center",
-    "新型コロナ受診相談窓口相談件数": "Number of inquiries to combined telephone advisory center",
-    "都営地下鉄の利用者数の推移": "The predicted number of Toei subway passengers",
-    "都庁来庁者数の推移": "Trend in the number of TMG visitors"
-  },
-  "zh-cn": {
-    "検査陽性者の状況": "确诊案例状况",
-    "陽性患者数": "确诊人数",
-    "陽性患者の属性": "确诊患者的信息",
-    "検査実施数": "送检件数",
-    "新型コロナコールセンター相談件数": "新型冠状病毒咨询中心咨询件数",
-    "新型コロナ受診相談窓口相談件数": "新冠肺炎就诊咨询窗口的咨询数",
-    "都営地下鉄の利用者数の推移": "都营地下铁搭乘人数趋势",
-    "都庁来庁者数の推移": "东京都厅来访人数推移"
-  },
-  "zh-tw": {
-    "検査陽性者の状況": "確診案例狀況",
-    "陽性患者数": "確診人數",
-    "陽性患者の属性": "確診案例概況",
-    "検査実施数": "送檢件數",
-    "新型コロナコールセンター相談件数": "新型冠狀病毒諮詢中心諮詢件數",
-    "新型コロナ受診相談窓口相談件数": "就診窗口諮詢數",
-    "都営地下鉄の利用者数の推移": "都營地下鐵搭乘人數走勢",
-    "都庁来庁者数の推移": "東京都廳來訪人數走勢"
-  },
-  "ko": {
-    "検査陽性者の状況": "확진자의 현황",
-    "陽性患者数": "확진자 수",
-    "陽性患者の属性": "확진 사례의 세부 사항",
-    "検査実施数": "검사실시수",
-    "新型コロナコールセンター相談件数": "코로나 19 콜센터 문의 건수",
-    "新型コロナ受診相談窓口相談件数": "코로나19 진찰 상담 창구 상담 건수",
-    "都営地下鉄の利用者数の推移": "도에이 지하철 의 예상 승객 수",
-    "都庁来庁者数の推移": "도쿄도 청사 방문자 수"
-  },
-  "ja-basic": {
-    "検査陽性者の状況": "びょうきの ひとは いま",
-    "陽性患者数": "びょうきの ひとの かず",
-    "陽性患者の属性": "びょうきの ひとの じょうほう",
-    "検査実施数": "けんさした かず",
-    "新型コロナコールセンター相談件数": "コロナウイルス そうだんで でんわが あった かず",
-    "新型コロナ受診相談窓口相談件数": "コロナのことで とうきょうと に そうだんした ひとの かず",
-    "都営地下鉄の利用者数の推移": "とえいちかてつを つかった ひとの かず",
-    "都庁来庁者数の推移": "議事堂（ぎじどう）に 来（き）た 人（ひと）の 合計（ごうけい）"
-  }
-}
-</i18n>
+<script lang="ts">
+/* eslint-disable simple-import-sort/imports -- ブラウザでの表示順に合わせて各 card の component を import する */
+// ---- モニタリング項目
+// 検査陽性者の状況
+import ConfirmedCasesDetailsCard from '@/components/index/CardsMonitoring/ConfirmedCasesDetails/Card.vue'
+// 報告日別による陽性者数の推移
+import ConfirmedCasesNumberCard from '@/components/index/CardsMonitoring/ConfirmedCasesNumber/Card.vue'
+// モニタリング項目
+import MonitoringItemsOverviewCard from '@/components/index/CardsMonitoring/MonitoringItemsOverview/Card.vue'
+// モニタリング項目(1)新規陽性者数
+import MonitoringConfirmedCasesNumberCard from '@/components/index/CardsMonitoring/MonitoringConfirmedCasesNumber/Card.vue'
+// モニタリング項目(2)#7119における発熱等相談件数
+import ConsultationAboutFeverNumberCard from '@/components/index/CardsMonitoring/ConsultationAboutFeverNumber/Card.vue'
+// モニタリング項目(3)新規陽性者における接触歴等不明者数
+import UntrackedRateCard from '@/components/index/CardsMonitoring/UntrackedRate/Card.vue'
+// モニタリング項目(4)検査の陽性率
+import PositiveRateCard from '@/components/index/CardsMonitoring/PositiveRate/Card.vue'
+// モニタリング項目(5)救急医療の東京ルールの適用件数
+import TokyoRulesApplicationNumberCard from '@/components/index/CardsMonitoring/TokyoRulesApplicationNumber/Card.vue'
+// モニタリング項目(6)入院患者数
+import HospitalizedNumberCard from '@/components/index/CardsMonitoring/HospitalizedNumber/Card.vue'
+// モニタリング項目(7)重症患者数
+import SevereCaseCard from '@/components/index/CardsMonitoring/SevereCase/Card.vue'
+// ---- その他 参考指標
+// 陽性者の属性
+import ConfirmedCasesAttributesCard from '@/components/index/CardsReference/ConfirmedCasesAttributes/Card.vue'
+// 陽性者数（区市町村別）
+import ConfirmedCasesByMunicipalitiesCard from '@/components/index/CardsReference/ConfirmedCasesByMunicipalities/Card.vue'
+// 発症日別による陽性者数の推移
+import PositiveNumberByDevelopedDateCard from '@/components/index/CardsReference/PositiveNumberByDevelopedDate/Card.vue'
+// 確定日別による陽性者数の推移
+import PositiveNumberByDiagnosedDateCard from '@/components/index/CardsReference/PositiveNumberByDiagnosedDate/Card.vue'
+// 死亡日別による死亡者数の推移
+import DeathsByDeathDateCard from '@/components/index/CardsReference/DeathsByDeathDate/Card.vue'
+// 検査実施件数
+import TestedNumberCard from '@/components/index/CardsReference/TestedNumber/Card.vue'
+// N501Y変異株スクリーニングの実施状況
+import VariantCard from '@/components/index/CardsReference/Variant/Card.vue'
+// 新型コロナコールセンター相談件数
+import TelephoneAdvisoryReportsNumberCard from '@/components/index/CardsReference/TelephoneAdvisoryReportsNumber/Card.vue'
+// 受診相談窓口における相談件数
+import MonitoringConsultationDeskReportsNumberCard from '@/components/index/CardsReference/MonitoringConsultationDeskReportsNumber/Card.vue'
+// 東京都発熱相談センターにおける相談件数
+import TokyoFeverConsultationCenterReportsNumberCard from '@/components/index/CardsReference/TokyoFeverConsultationCenterReportsNumber/Card.vue'
+// 都営地下鉄の利用者数の推移
+import MetroCard from '@/components/index/CardsReference/Metro/Card.vue'
+// 都庁来庁者数の推移
+import AgencyCard from '@/components/index/CardsReference/Agency/Card.vue'
+/* eslint-enable simple-import-sort/imports */
 
-<script>
-import Data from '@/data/data.json'
-import MetroData from '@/data/metro.json'
-import agencyData from '@/data/agency.json'
-import ConfirmedCasesDetailsCard from '@/components/cards/ConfirmedCasesDetailsCard.vue'
-import ConfirmedCasesNumberCard from '@/components/cards/ConfirmedCasesNumberCard.vue'
-import ConfirmedCasesAttributesCard from '@/components/cards/ConfirmedCasesAttributesCard.vue'
-import TestedNumberCard from '@/components/cards/TestedNumberCard.vue'
-import TelephoneAdvisoryReportsNumberCard from '@/components/cards/TelephoneAdvisoryReportsNumberCard.vue'
-import ConsultationDeskReportsNumberCard from '@/components/cards/ConsultationDeskReportsNumberCard.vue'
-import MetroCard from '@/components/cards/MetroCard.vue'
-import AgencyCard from '@/components/cards/AgencyCard.vue'
+import { Vue, Component } from 'nuxt-property-decorator'
+import { getLinksLanguageAlternative } from '@/utils/i18nUtils'
+import { convertDateToSimpleFormat } from '@/utils/formatDate'
+import type { NuxtOptionsHead as MetaInfo } from '@nuxt/types/config/head'
+import type { NuxtConfig } from '@nuxt/types'
 
-export default {
+@Component({
   components: {
+    // ---- モニタリング項目
     ConfirmedCasesDetailsCard,
     ConfirmedCasesNumberCard,
+    MonitoringItemsOverviewCard,
+    MonitoringConfirmedCasesNumberCard,
+    ConsultationAboutFeverNumberCard,
+    UntrackedRateCard,
+    PositiveRateCard,
+    TokyoRulesApplicationNumberCard,
+    HospitalizedNumberCard,
+    SevereCaseCard,
+    // ---- その他 参考指標
     ConfirmedCasesAttributesCard,
+    ConfirmedCasesByMunicipalitiesCard,
+    PositiveNumberByDevelopedDateCard,
+    PositiveNumberByDiagnosedDateCard,
+    DeathsByDeathDateCard,
     TestedNumberCard,
+    VariantCard,
     TelephoneAdvisoryReportsNumberCard,
-    ConsultationDeskReportsNumberCard,
+    MonitoringConsultationDeskReportsNumberCard,
+    TokyoFeverConsultationCenterReportsNumberCard,
     MetroCard,
-    AgencyCard
+    AgencyCard,
   },
+})
+export default class CardContainer extends Vue implements NuxtConfig {
   data() {
-    let title, updatedAt
+    let title, updatedAt, cardComponent
     switch (this.$route.params.card) {
+      // NOTE: 以下，ブラウザでの表示順に合わせて条件分岐を行う
+      // ---- モニタリング項目
+      // 検査陽性者の状況
       case 'details-of-confirmed-cases':
-        title = this.$t('検査陽性者の状況')
-        updatedAt = Data.inspections_summary.date
+        cardComponent = 'confirmed-cases-details-card'
         break
+      // 報告日別による陽性者数の推移
       case 'number-of-confirmed-cases':
-        title = this.$t('陽性患者数')
-        updatedAt = Data.patients.date
+        cardComponent = 'confirmed-cases-number-card'
         break
+      // モニタリング項目
+      case 'monitoring-items-overview':
+        cardComponent = 'monitoring-items-overview-card'
+        break
+      // モニタリング項目(1)新規陽性者数
+      case 'monitoring-number-of-confirmed-cases':
+        cardComponent = 'monitoring-confirmed-cases-number-card'
+        break
+      // モニタリング項目(2)#7119における発熱等相談件数
+      case 'number-of-reports-to-consultations-about-fever-in-7119':
+        cardComponent = 'consultation-about-fever-number-card'
+        break
+      // モニタリング項目(3)新規陽性者における接触歴等不明者数
+      case 'untracked-rate':
+        cardComponent = 'untracked-rate-card'
+        break
+      // モニタリング項目(4)検査の陽性率
+      case 'positive-rate':
+        cardComponent = 'positive-rate-card'
+        break
+      // モニタリング項目(5)救急医療の東京ルールの適用件数
+      case 'number-of-tokyo-rules-applied':
+        cardComponent = 'tokyo-rules-application-number-card'
+        break
+      // モニタリング項目(6)入院患者数
+      case 'number-of-hospitalized':
+        cardComponent = 'hospitalized-number-card'
+        break
+      // モニタリング項目(7)重症患者数
+      case 'positive-status-severe-case':
+        cardComponent = 'severe-case-card'
+        break
+      // ---- その他 参考指標
+      // 陽性者の属性
       case 'attributes-of-confirmed-cases':
-        title = this.$t('陽性患者の属性')
-        updatedAt = Data.patients.date
+        cardComponent = 'confirmed-cases-attributes-card'
         break
+      // 陽性者数（区市町村別）
+      case 'number-of-confirmed-cases-by-municipalities':
+        cardComponent = 'confirmed-cases-by-municipalities-card'
+        break
+      // 発症日別による陽性者数の推移
+      case 'positive-number-by-developed-date':
+        cardComponent = 'positive-number-by-developed-date-card'
+        break
+      // 確定日別による陽性者数の推移
+      case 'positive-number-by-diagnosed-date':
+        cardComponent = 'positive-number-by-diagnosed-date-card'
+        break
+      // 死亡日別による死亡者数の推移
+      case 'deaths-by-death-date':
+        cardComponent = 'deaths-by-death-date-card'
+        break
+      // 検査実施件数
       case 'number-of-tested':
-        title = this.$t('検査実施数')
-        updatedAt = Data.inspections_summary.date
+        cardComponent = 'tested-number-card'
         break
+      // N501Y変異株スクリーニングの実施状況
+      case 'variant':
+        cardComponent = 'variant-card'
+        break
+      // 新型コロナコールセンター相談件数
       case 'number-of-reports-to-covid19-telephone-advisory-center':
-        title = this.$t('新型コロナコールセンター相談件数')
-        updatedAt = Data.contacts.date
+        cardComponent = 'telephone-advisory-reports-number-card'
         break
-      case 'number-of-reports-to-covid19-consultation-desk':
-        title = this.$t('新型コロナ受診相談窓口相談件数')
-        updatedAt = Data.querents.date
+      // 受診相談窓口における相談件数
+      case 'monitoring-number-of-reports-to-covid19-consultation-desk':
+        cardComponent = 'monitoring-consultation-desk-reports-number-card'
         break
+      // 東京都発熱相談センターにおける相談件数
+      case 'number-of-reports-to-tokyo-fever-consultation-center':
+        cardComponent = 'tokyo-fever-consultation-center-reports-number-card'
+        break
+      // 都営地下鉄の利用者数の推移
       case 'predicted-number-of-toei-subway-passengers':
-        title = this.$t('都営地下鉄の利用者数の推移')
-        updatedAt = MetroData.date
+        cardComponent = 'metro-card'
         break
+      // 都庁来庁者数の推移
       case 'agency':
-        title = this.$t('都庁来庁者数の推移')
-        updatedAt = agencyData.date
-        break
+        cardComponent = 'agency-card'
     }
-
-    const data = {
+    /* eslint-enable simple-import-sort/imports */
+    return {
+      cardComponent,
       title,
-      updatedAt
+      updatedAt,
     }
-    return data
-  },
+  }
+
   head() {
     const url = 'https://stopcovid19.metro.tokyo.lg.jp'
     const timestamp = new Date().getTime()
+    const defaultTitle = `${this.$t('東京都')} ${this.$t(
+      '新型コロナウイルス感染症'
+    )}${this.$t('対策サイト')}`
     const ogpImage =
-      url + '/ogp-' + this.$route.params.card + '.png?t=' + timestamp
-    const description =
-      this.updatedAt +
-      ' 更新 | ' +
-      '当サイトは新型コロナウイルス感染症（COVID-19）に関する最新情報を提供するために、東京都が開設したものです。'
+      (this.$i18n.locale ?? 'ja') === 'ja'
+        ? `${url}/ogp/${this.$route.params.card}.png?t=${timestamp}`
+        : `${url}/ogp/${this.$i18n.locale}/${this.$route.params.card}.png?t=${timestamp}`
 
-    return {
-      title: this.title,
+    const mInfo: MetaInfo = {
+      title: `${
+        (this.$data.title ?? '') !== ''
+          ? this.$data.title + ' | ' + defaultTitle
+          : defaultTitle
+      }`,
+      link: [
+        ...(getLinksLanguageAlternative(
+          `cards/${this.$route.params.card}`,
+          this.$i18n.locales,
+          this.$i18n.defaultLocale
+        ) as []),
+      ],
       meta: [
         {
           hid: 'og:url',
           property: 'og:url',
-          content: url + this.$route.path + '/'
+          content: `${url}${this.$route.path}/`,
         },
         {
           hid: 'og:title',
           property: 'og:title',
-          content: this.title + ' | 東京都 新型コロナウイルス感染症対策サイト'
+          content: `${
+            (this.$data.title ?? '') !== ''
+              ? this.$data.title + ' | ' + defaultTitle
+              : defaultTitle
+          }`,
         },
         {
           hid: 'description',
           name: 'description',
-          content: description
+          content: `${this.$t('{date} 更新', {
+            date: convertDateToSimpleFormat(this.$data.updatedAt),
+          })}: ${this.$tc(
+            '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、東京都が開設したものです。'
+          )}`,
         },
         {
           hid: 'og:description',
           property: 'og:description',
-          content: description
+          content: `${this.$t('{date} 更新', {
+            date: convertDateToSimpleFormat(this.$data.updatedAt),
+          })}: ${this.$tc(
+            '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、東京都が開設したものです。'
+          )}`,
         },
         {
           hid: 'og:image',
           property: 'og:image',
-          content: ogpImage
+          content: `${ogpImage}`,
         },
         {
           hid: 'twitter:image',
           name: 'twitter:image',
-          content: ogpImage
-        }
-      ]
+          content: `${ogpImage}`,
+        },
+      ],
     }
+    return mInfo
   }
 }
 </script>

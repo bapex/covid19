@@ -1,9 +1,7 @@
 <template>
   <div class="About">
-    <h2 class="About-Heading">
-      {{ $t('当サイトについて') }}
-    </h2>
-    <TextCard>
+    <page-header :title="$t('当サイトについて')" />
+    <static-card>
       {{
         $t(
           '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、東京都が開設したものです。'
@@ -15,200 +13,314 @@
           '東京都による公式情報と客観的な数値をわかりやすく伝えることで、東京都にお住まいの方や、東京都内に拠点を持つ企業の方、東京都を訪れる方が、現状を把握して適切な対策を取れるようにすることを目的としています。'
         )
       }}
-    </TextCard>
-    <TextCard :title="$t('ブラウザ環境について')">
-      {{ $t('当サイトは以下の環境でご覧いただくことを推奨いたします。') }}<br />
-      <br />
-      <ul class="About-Browser-List">
+    </static-card>
+    <static-card>
+      <h3>{{ $t('ウェブアクセシビリティ方針') }}</h3>
+      <p>
+        {{
+          $t(
+            '東京都新型コロナウイルス感染症対策サイトでは、「JISX8341-3:2016 高齢者・障害者等配慮設計指針－情報通信における機器、ソフトウェア及びサービス－第3部：ウェブコンテンツ」に対応することを目標とし、アクセシビリティの確保と向上に取り組んでいます。'
+          )
+        }}
+      </p>
+      <dl>
+        <dt>{{ $t('対象範囲') }}</dt>
+        <i18n tag="dd" path="{site}以下全ページ">
+          <template #site>
+            <app-link to="/"> https://stopcovid19.metro.tokyo.lg.jp/ </app-link>
+          </template>
+        </i18n>
+        <dt>{{ $t('適合レベル及び対応度') }}</dt>
+        <dd>{{ $t('JIS X 8341-3:2016の適合レベルAAに準拠') }}</dd>
+        <dt>{{ $t('目標を達成する期限') }}</dt>
+        <dd>{{ formatDate(new Date('2021-09-30')) }}</dd>
+        <dt>{{ $t('例外事項') }}</dt>
+        <dd>
+          <p>
+            {{
+              $t(
+                '以下は現時点では修正対応が困難であるため、目標の対象外とします。'
+              )
+            }}
+          </p>
+          <ul>
+            <i18n
+              tag="li"
+              path="本サイト外から提供されるコンテンツ（{site}の「感染状況・医療提供体制の分析」内におけるサムネイル画像）"
+            >
+              <template #site>
+                <app-link to="/">
+                  https://stopcovid19.metro.tokyo.lg.jp/
+                </app-link>
+              </template>
+            </i18n>
+            <li>
+              {{
+                $t(
+                  '外部サービスを使用しているコンテンツ及びそれに付随するコンテンツ（全ページに表示される「【東京都新型コロナ】ご質問にチャットボットがお答えします」の機能）'
+                )
+              }}
+            </li>
+          </ul>
+        </dd>
+        <dt>{{ $t('担当部署') }}</dt>
+        <dd>{{ $t('政策企画局（03-5388-2171）') }}</dd>
+      </dl>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('ブラウザ環境について') }}</h3>
+      <p>
+        {{ $t('当サイトは以下の環境でご覧いただくことを推奨いたします。') }}
+      </p>
+      <ul>
         <li>{{ $t('Microsoft Edge 最新版') }}</li>
         <li>{{ $t('Mozilla Firefox 最新版') }}</li>
-        <li>{{ $t('Google Chrome 最新版（Windows 10以上）') }}</li>
-        <li>{{ $t('Apple Safari (macOS) 最新版') }}</li>
-        <li>{{ $t('Opera Software ASA Opera 最新版') }}</li>
+        <li>
+          {{ $t('Google Chrome 最新版（Windows 10以上, Android 8.0以上）') }}
+        </li>
+        <li>{{ $t('Safari 最新版（macOS, iOS）') }}</li>
+        <li>{{ $t('Opera 最新版') }}</li>
       </ul>
-      {{
-        $t(
-          '※ 推奨環境以外で利用された場合や、推奨環境下でもご利用のブラウザの設定等によっては、正しく表示されない場合がありますのでご了承ください。'
-        )
-      }}
-    </TextCard>
-    <TextCard :title="$t('当サイトへのリンクについて')">
-      {{ $t('当サイトへのリンクは自由です。') }}
-    </TextCard>
-    <TextCard :title="$t('JavaScriptについて')">
-      {{ $t('当サイトではJavaScriptを使用しております。') }}<br />
-      {{
-        $t(
-          'JavaScriptを無効にして使用された場合、各ページが正常に動作しない、または、表示されない場合がございます。'
-        )
-      }}<br />
-      {{
-        $t(
-          '当サイトをご利用の際には、JavaScriptを有効にして頂きますようお願いいたします。'
-        )
-      }}
-    </TextCard>
-    <TextCard :title="$t('クッキー (Cookie) について')">
-      {{ $t('当サイトの一部ではクッキーを使用しています。') }}<br />
-      {{
-        $t(
-          'クッキーとは、Webコンテンツからの要求で利用者の手元の端末に一時的に保存されるデータのことで、当サイトでは利用状況の把握のためにクッキーを使用する場合があります。'
-        )
-      }}<br />
-      <br />
-      {{
-        $t(
-          'ブラウザに関する情報の収集を希望しない場合は、インターネット閲覧ソフト（ブラウザ）をご自身で設定することにより、クッキーの機能が働かないようにすることも可能です。'
-        )
-      }}<br />
-      <br />
-      {{
-        $t(
-          'ただし、クッキーを受け入れない設定をされている場合は、当サイトの機能が正常に動作しない場合がございます。'
-        )
-      }}
-    </TextCard>
-    <TextCard :title="$t('Google Analyticsの利用について')">
-      {{
-        $t(
-          '当サイトでは、サービス向上やサイトの改善のためにGoogle LLCの提供するアクセス分析のツールであるGoogle Analyticsを利用した計測を行っております。'
-        )
-      }}<br />
-      {{
-        $t(
-          'Google Analyticsは、当サイトが発行するクッキー (Cookie) を利用して、個人を特定する情報を含まずにWebサイトの利用データ（アクセス状況、トラフィック、閲覧環境など）を収集しております。クッキー (Cookie) の利用に関してはGoogleのプライバシーポリシーと規約に基づいております。'
-        )
-      }}<br />
-      {{
-        $t(
-          '取得したデータは Webサイト利用状況の分析、サイト運営者へのレポートの作成、その他のサービスの提供に関わる目的に限り、これを使用します。'
-        )
-      }}<br />
-      {{
-        $t(
-          'Google Analyticsの利用規約及びプライバシーポリシーに関する説明については、Google Analyticsのサイトをご覧ください。'
-        )
-      }}<br />
+      <p class="StaticCard-Note">
+        <span>{{ $t('※') }}</span>
+        <span>
+          {{
+            $t(
+              '※ 推奨環境以外で利用された場合や、推奨環境下でもご利用のブラウザの設定等によっては、正しく表示されない場合がありますのでご了承ください。'
+            )
+          }}
+        </span>
+      </p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('当サイトへのリンクについて') }}</h3>
+      <p>{{ $t('当サイトへのリンクは自由です。') }}</p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('JavaScriptについて') }}</h3>
+      <p>
+        {{ $t('当サイトではJavaScriptを使用しております。') }}<br />
+        {{
+          $t(
+            'JavaScriptを無効にして使用された場合、各ページが正常に動作しない、または、表示されない場合がございます。'
+          )
+        }}<br />
+        {{
+          $t(
+            '当サイトをご利用の際には、JavaScriptを有効にして頂きますようお願いいたします。'
+          )
+        }}
+      </p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('クッキー (Cookie) について') }}</h3>
+      <p>
+        {{ $t('当サイトの一部ではクッキーを使用しています。') }}<br />
+        {{
+          $t(
+            'クッキーとは、Webコンテンツからの要求で利用者の手元の端末に一時的に保存されるデータのことで、当サイトでは利用状況の把握のためにクッキーを使用する場合があります。'
+          )
+        }}<br />
+      </p>
+      <p>
+        {{
+          $t(
+            'ブラウザに関する情報の収集を希望しない場合は、インターネット閲覧ソフト（ブラウザ）をご自身で設定することにより、クッキーの機能が働かないようにすることも可能です。'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            'ただし、クッキーを受け入れない設定をされている場合は、当サイトの機能が正常に動作しない場合がございます。'
+          )
+        }}
+      </p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('Google Analyticsの利用について') }}</h3>
+      <p>
+        {{
+          $t(
+            '当サイトでは、サービス向上やサイトの改善のためにGoogle LLCの提供するアクセス分析のツールであるGoogle Analyticsを利用した計測を行っております。'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            'Google Analyticsでは、当サイトが発行するクッキー (Cookie) 等を利用して、Webサイトの利用データ（アクセス状況、トラフィック、閲覧環境、IPアドレスなど）を収集しております。クッキーの利用に関してはGoogleのプライバシーポリシーと規約に基づいております。'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            '取得したデータはWebサイト利用状況を分析しサービスの改善につなげるため、またはサイト運営者へのレポートを作成するため、その他のサービスの提供に関わる目的に限り、これを使用します。（サイト運営者へのレポートでは、クッキーはブラウザ単位で本サイトのユーザー数をカウントするため、IPアドレスはGoogle Analyticsの分析機能を通じてアクセス元の地域分布（国、州・都道府県、都市）を把握するために利用されています。）'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            'Google Analyticsの利用規約及びプライバシーポリシーに関する説明については、Google Analyticsのサイトをご覧ください。'
+          )
+        }}
+      </p>
       <ul>
         <li>
-          <a
-            href="https://marketingplatform.google.com/about/analytics/terms/jp"
-            target="_blank"
-            rel="noopener"
+          <app-link
+            :to="
+              $t(
+                'https://marketingplatform.google.com/about/analytics/terms/jp/'
+              )
+            "
+            :icon-size="16"
           >
             {{ $t('Google Analytics利用規約') }}
-          </a>
+          </app-link>
         </li>
         <li>
-          <a
-            href="https://policies.google.com/privacy?hl=ja"
-            target="_blank"
-            rel="noopener"
+          <app-link
+            :to="$t('https://policies.google.com/privacy?hl=ja')"
+            :icon-size="16"
           >
             {{ $t('Googleのプライバシーポリシー') }}
-          </a>
+          </app-link>
         </li>
         <li>
-          <a
-            href="https://support.google.com/analytics/answer/6004245"
-            target="_blank"
-            rel="noopener"
+          <app-link
+            :to="
+              $t('https://support.google.com/analytics/answer/6004245?hl=ja')
+            "
+            :icon-size="16"
           >
             {{ $t('Google Analyticsに関する詳細情報') }}
-          </a>
+          </app-link>
         </li>
       </ul>
-    </TextCard>
-    <TextCard :title="$t('免責事項')">
-      {{
-        $t(
-          '当サイトに掲載されている情報の正確性については万全を期していますが、東京都は利用者が当サイトの情報を用いて行う一切の行為について責任を負うものではありません。'
-        )
-      }}<br />
-      <br />
-      {{
-        $t(
-          'また、利用者が当サイトを利用したことにより発生した利用者の損害及び利用者が第三者に与えた損害に対して、責任を負うものではありません。'
-        )
-      }}<br />
-      <br />
-      {{
-        $t(
-          '当サイトに掲載されている情報は、予告なしに変更又は削除することがあります。'
-        )
-      }}
-    </TextCard>
-    <TextCard :title="$t('データについて')">
+      <i18n
+        tag="p"
+        path="Google Analyticsによる情報送信を回避する場合は、Google がサポートする{addon}をご利用ください。"
+      >
+        <template #addon>
+          <app-link
+            :to="$t('https://tools.google.com/dlpage/gaoptout?hl=ja')"
+            :icon-size="16"
+          >
+            {{ $t('測定を無効にするブラウザ アドオン') }}
+          </app-link>
+        </template>
+      </i18n>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('免責事項') }}</h3>
+      <p>
+        {{
+          $t(
+            '当サイトに掲載されている情報の正確性については万全を期していますが、東京都は利用者が当サイトの情報を用いて行う一切の行為について責任を負うものではありません。'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            'また、利用者が当サイトを利用したことにより発生した利用者の損害及び利用者が第三者に与えた損害に対して、責任を負うものではありません。'
+          )
+        }}
+      </p>
+      <p>
+        {{
+          $t(
+            '当サイトに掲載されている情報は、予告なしに変更又は削除することがあります。'
+          )
+        }}
+      </p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('データについて') }}</h3>
       <i18n
         tag="p"
         path="本サイトで公表しているデータは、{catalogWebsite}より誰でも自由にダウンロードが可能です。（データは順次追加予定です）"
       >
-        <a
-          href="https://portal.data.metro.tokyo.lg.jp/"
-          target="_blank"
-          rel="noopener"
-          place="catalogWebsite"
-        >
-          {{ $t('東京都オープンデータカタログサイト') }}
-        </a>
+        <template #catalogWebsite>
+          <app-link to="https://portal.data.metro.tokyo.lg.jp/" :icon-size="16">
+            {{ $t('東京都オープンデータカタログサイト') }}
+          </app-link>
+        </template>
       </i18n>
-    </TextCard>
-    <TextCard :title="$t('ソースコードについて')">
-      {{
-        $t(
-          '当サイトのソースコードはMITライセンスで公開されており、誰でも自由に利用することができます。'
-        )
-      }}
-      <i18n path="詳しくは、{githubRepo}をご確認ください。">
-        <a
-          href="https://github.com/tokyo-metropolitan-gov/covid19"
-          target="_blank"
-          rel="noopener"
-          place="githubRepo"
-        >
-          {{ $t('GitHub リポジトリ') }}
-        </a>
-      </i18n>
-    </TextCard>
-    <TextCard :title="$t('お問い合わせ先（都のHPサイトポリシーについて）')">
-      {{ $t('東京都生活文化局広報広聴部広報課') }}<br />
-      {{ $t('電話') }}:
-      <a href="tel:03-5388-3085">03-5388-3085</a>
-    </TextCard>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('ソースコードについて') }}</h3>
+      <p>
+        {{
+          $t(
+            '当サイトのソースコードはMITライセンスで公開されており、誰でも自由に利用することができます。'
+          )
+        }}
+        <i18n path="詳しくは、{githubRepo}をご確認ください。">
+          <template #githubRepo>
+            <app-link
+              to="https://github.com/tokyo-metropolitan-gov/covid19"
+              :icon-size="16"
+            >
+              {{ $t('GitHub リポジトリ') }}
+            </app-link>
+          </template>
+        </i18n>
+      </p>
+    </static-card>
+    <static-card>
+      <h3>{{ $t('コンテンツについて') }}</h3>
+      <ul>
+        <li>
+          {{
+            $t(
+              'このサイトの内容物はクリエイティブ・コモンズ 表示 4.0 ライセンスの下に提供されています。'
+            )
+          }}
+        </li>
+        <li>
+          {{ $t('ただし商標等の他団体が権利を持つ以下のものは除きます。') }}
+          <ul>
+            <li>{{ $t('Gマーク（グッドデザイン賞受賞マーク）') }}</li>
+            <li>
+              {{
+                $t(
+                  '各SNS（LINE、Twitter、Facebook、GitHub、YouTube）ロゴマーク'
+                )
+              }}
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </static-card>
   </div>
 </template>
 
-<i18n src="./about.i18n.json"></i18n>
-
 <script lang="ts">
-import TextCard from '@/components/TextCard.vue'
+import Vue from 'vue'
+import { MetaInfo } from 'vue-meta'
 
-export default {
+import AppLink from '@/components/_shared/AppLink.vue'
+import PageHeader from '@/components/_shared/PageHeader.vue'
+import StaticCard from '@/components/_shared/StaticCard.vue'
+
+export default Vue.extend({
   components: {
-    TextCard
+    PageHeader,
+    StaticCard,
+    AppLink,
   },
-  head() {
+  head(): MetaInfo {
     return {
-      title: '当サイトについて'
+      title: this.$t('当サイトについて') as string,
     }
-  }
-}
+  },
+  methods: {
+    formatDate(date) {
+      return `${this.$d(date, 'date')}`
+    },
+  },
+})
 </script>
-
-<style lang="scss">
-.About {
-  &-Heading {
-    @include font-size(30);
-    font-weight: normal;
-    color: $gray-2;
-    margin-bottom: 12px;
-  }
-  & &-Browser-List {
-    // セレクタ指定が&-Browser-List のみだと
-    // .v-application ul の設定が勝ってしまい padding-left が24px となってしまうため
-    // このようなセレクタ指定としています
-    list-style: none;
-    padding: 12px 0;
-  }
-}
-</style>

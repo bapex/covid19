@@ -1,16 +1,11 @@
 <template>
-  <DesktopFlowSvg />
+  <div />
 </template>
 
-<script>
-import DesktopFlowSvg from '@/components/DesktopFlowSvg.vue'
-export default {
-  components: { DesktopFlowSvg },
-  layout: 'print',
-  head() {
-    return {
-      title: '新型コロナウイルス感染症にかかる相談窓口について'
-    }
-  }
-}
+<script lang="ts">
+import Vue from 'vue'
+
+export default Vue.extend({
+  middleware: 'redirect',
+})
 </script>
